@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import useAuthStore from './store/authStore'
 import Navbar from './components/Navbar'
@@ -17,7 +17,13 @@ function PrivateRoute({ children }) {
 
 export default function App() {
   const { getMe } = useAuthStore()
-  useEffect(() => { getMe() }, [])
+  const called = useRef(false)
+  useEffect(() => {
+    if (!called.current) {
+      called.current = true
+      getMe()
+    }
+  }, [])
 
   return (
     <BrowserRouter>
